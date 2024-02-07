@@ -92,22 +92,3 @@
     font-size:2em;
    color: hsl(274deg, 82%, 60%);
 }
-.partsOfSpeech{
-    padding-left: 18vw;
-}
-.speech{
-    display: block;
-    font-size: 1.5em;
-    font-weight: bold;
-  
-}
-.non{
-    display:flex;
-    align-items: center;
-    gap:3vw;
-}
-
-.line{
-    border:0.4px solid grey;
-    flex:1;
-}

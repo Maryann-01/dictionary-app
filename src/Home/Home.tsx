@@ -1,6 +1,7 @@
 import { FaAngleDown, FaSun, FaPlay } from "react-icons/fa6";
 import { FaMoon, FaSearch, FaBook } from "react-icons/fa";
 import { useState, useEffect } from "react";
+import PartsOfSpeech from "../partsOfSpeech/partsOfSpeech";
 import "../Home/Home.css"
 const Home = () => {
   const [themeIcon, setThemeIcon] = useState("light")
@@ -15,6 +16,7 @@ const Home = () => {
     console.log(data[0])
     setPost(data);
   }
+
 
   useEffect(() => {
     fetchData()
@@ -32,6 +34,8 @@ const Home = () => {
       handleSubmit(e)
     }
   }
+
+ 
   return (
     <div className="body">
       <section className='navbar'>
@@ -64,14 +68,8 @@ const Home = () => {
             <FaPlay className="playIcon" />
           </div>
         </div>
-        <p className="phonetics">{post[0].phonetic}</p>
       </section>
-      <section className="partsOfSpeech">
-        <div className="non">
-          <h2 className="speech">{post[0].meanings[0].partOfSpeech}</h2>
-          <div className="line"></div>
-        </div>
-      </section>
+      <PartsOfSpeech post={post}/>
     </div>
   )
 }
