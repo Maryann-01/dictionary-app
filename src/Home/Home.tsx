@@ -1,16 +1,29 @@
 import { FaAngleDown, FaSun, FaPlay } from "react-icons/fa6";
 import { FaMoon, FaSearch, FaBook } from "react-icons/fa";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import PartsOfSpeech from "../partsOfSpeech/partsOfSpeech";
 import "../Home/Home.css"
-const Home = () => {
-  const [themeIcon, setThemeIcon] = useState("light")
+interface Definition {
+  post: {
+    word: string | undefined;
+    phonetics: Dictionary[];
+  }[]
+
+}
+
+const Home: React.FC<Definition> = ({ themeIcon, toggleTheme }) => {
+  // const [themeIcon, setThemeIcon] = useState("light")
   const [value, setValue] = useState("")
   const [post, setPost] = useState([])
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null); // Ref for the <audio> element
 
+  const handleToggleTheme=()=>{
+    toggleTheme();
+  }
   const fetchData = async () => {
     const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${value}`
-    const response = await fetch(url); // Wait for the promise to resolve
+    const response = await fetch(url); 
     const data = await response.json();
 
     console.log(data[0])
@@ -35,7 +48,23 @@ const Home = () => {
     }
   }
 
- 
+  const handlePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+       
+      } else {
+        const audioUrl = post[0].phonetics.find((dict) => dict.audio)?.audio;// Find the first dictionary with "audio" and display its audio
+        if (audioUrl) {
+          audioRef.current.src = audioUrl;
+          audioRef.current.play().catch((error) =>
+            console.error("Audio playback error:", error)
+          );
+          setIsPlaying(true);
+        }
+      }
+    }
+  };
+
   return (
     <div className="body">
       <section className='navbar'>
@@ -49,13 +78,13 @@ const Home = () => {
             <div className="toggle-theme">
               <div></div>
             </div>
-            {themeIcon === "light" ? <FaSun /> : <FaMoon />}
+            {themeIcon === "light" ? <FaSun onClick={handleToggleTheme} /> : <FaMoon onClick={handleToggleTheme}/>}
           </div>
         </div>
       </section>
       <section className="part-two">
         <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="Search for any word..." value={value} onKeyDown={handleKeyDown} onChange={(e) => setValue(e.target.value)} />
+          <input type="text" className="input-field" placeholder="Search for any word..." value={value} onKeyDown={handleKeyDown} onChange={(e) => setValue(e.target.value)} />
           <FaSearch className="faSearch" />
         </form>
       </section>
@@ -64,12 +93,22 @@ const Home = () => {
           {post.length > 0 && (
             <h1 key={post[0].word}>{post[0].word}</h1> // Display only first word
           )}
-          <div className="play">
+
+          <div className="play" onClick={handlePlay}>
+            <audio ref={audioRef} onEnded={() => setIsPlaying(false)} />
             <FaPlay className="playIcon" />
           </div>
         </div>
+        <p className="phonetics">
+          {post.length > 0 && (
+            // Find the first dictionary with "text" and display its text
+            <span>
+              {post[0].phonetics.find((dict) => dict.text)?.text ?? "No phonetics found"}
+            </span>
+          )}
+        </p>
       </section>
-      <PartsOfSpeech post={post}/>
+      <PartsOfSpeech post={post} />
     </div>
   )
 }

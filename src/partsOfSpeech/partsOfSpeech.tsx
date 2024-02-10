@@ -1,12 +1,15 @@
 import "../partsOfSpeech/partsOfSpeech.css"
 interface PartsOfSpeechProps {
     post: {
+        sourceUrls: string[];
         meanings: {
             partOfSpeech: string;
+            synonyms: string[];
+            antonyms: string[];
             definitions: {
                 definition: string;
                 example: string;
-                synonyms:string;
+
             }[];
         }[];
     }[];
@@ -21,35 +24,47 @@ const partsOfSpeech: React.FC<PartsOfSpeechProps> = ({ post }) => {
                         <div className="line"></div>
                     </div>
                     <div>
-                        <p>Meaning</p>
+                        <p className="meaning">Meaning</p>
                     </div>
                     <div >
 
-                            {meaning.definitions.map((definition, subIndex) => (
-                                <div>
-                                     <div className="dot-div">
-                                       <p className="dot" style={{ textAlign: "center" }}>.</p>
-                                       <p key={subIndex}>{definition.definition}</p>
-                                     </div> 
-                                    <div className="examples">
-                                        <p key={subIndex}>{definition?.example}</p>
-                                    </div>
-                                   
+                        {meaning.definitions.map((definition, subIndex) => (
+                            <div className="eg-definition">
+                                <div className="dot-div">
+                                    <p className="dot" style={{ textAlign: "center" }}>.</p>
+                                    <p key={subIndex} className="definition-p">{definition.definition}</p>
                                 </div>
-                            ))}
-                                {meaning.definitions.map((definition, synIndex) => (
-                                        <div className="synonym">
-                                          <p>Synonyms</p>
-                                          <p key={synIndex}>{definition?.synonyms}</p>
+                                {definition.example && (
+                                    <div className="examples">
+                                        <p key={subIndex}>{definition.example}</p>
                                     </div>
-                                ))
-}
-                        
+                                )}
 
+                            </div>
+                        ))}
+                        {meaning.synonyms?.length > 0 && (
+                            <div className="synonyms-container">
+                                <p className="synon-words"><span className="synon-anton">Synonyms</span>{meaning.synonyms.join(", ")}</p>
+                            </div>
+                        )}
+                        {meaning.antonyms?.length > 0 && (
+                            <div className="synonyms-container anton-container">
+                                <p className="anton-words"><span className="synon-anton">Antonyms </span>{meaning.antonyms.join(", ")}</p>
+                            </div>
+                        )}
                     </div>
 
+
+
                 </div>
+
             ))}
+            <hr />
+            <div className="source">
+                <p>Source</p>
+                <p>{post[0]?.sourceUrls[0] || "No source URLs found"}</p>
+
+            </div>
         </div>
     )
 }

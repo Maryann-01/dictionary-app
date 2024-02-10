@@ -1,1 +1,13 @@
+.darktheme{
+    background-color: black;
+    color:white;
+}
 
+.lighttheme{
+    background-color: white;
+    color:black;
+}
+.fullPg{
+    height:100%;
+   
+}
