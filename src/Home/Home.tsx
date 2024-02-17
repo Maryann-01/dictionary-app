@@ -7,8 +7,8 @@ interface Definition {
   themeIcon: string; // Add themeIcon property
   toggleTheme: () => void;
   post: {
-    word: string | undefined;
-    phonetics: Dictionary[];
+    word?: string | undefined;
+    phonetics?: Dictionary[];
   }[]
 }
 interface Dictionary {
@@ -20,7 +20,7 @@ interface Dictionary {
 const Home: React.FC<Definition> = ({ themeIcon, toggleTheme }) => {
   // const [themeIcon, setThemeIcon] = useState("light")
   const [value, setValue] = useState("")
-  const [post, setPost] = useState([])
+  const [post, setPost] =useState<any[]>([])
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null); // Ref for the <audio> element
 
@@ -48,7 +48,7 @@ const Home: React.FC<Definition> = ({ themeIcon, toggleTheme }) => {
     fetchData();
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
       handleSubmit(e)
     }
@@ -59,7 +59,7 @@ const Home: React.FC<Definition> = ({ themeIcon, toggleTheme }) => {
       if (isPlaying) {
 
       } else {
-        const audioUrl = post[0].phonetics.find((dict) => dict.audio)?.audio;// Find the first dictionary with "audio" and display its audio
+        const audioUrl = post[0].phonetics.find((dict:Dictionary) => dict.audio)?.audio;// Find the first dictionary with "audio" and display its audio
         if (audioUrl) {
           audioRef.current.src = audioUrl;
           audioRef.current.play().catch((error) =>
@@ -107,10 +107,10 @@ const Home: React.FC<Definition> = ({ themeIcon, toggleTheme }) => {
             </div>
           </div>
           <p className="phonetics">
-            {post.length > 0 && (
+            {post.length > 0  && (
               // Find the first dictionary with "text" and display its text
               <span>
-                {post[0].phonetics.find((dict) => dict.text)?.text ?? "No phonetics found"}
+                {post[0].phonetics?.find((dict: Dictionary) => dict.text)?.text ?? "No phonetics found"}
               </span>
             )}
           </p>

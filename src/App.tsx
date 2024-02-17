@@ -5,10 +5,11 @@ import './App.css'
 
 function App() {
   const [themeIcon, setThemeIcon] = useState("light")
+  const [post, setPost] = useState([]);
   return (
     
     <div className={`fullPg ${themeIcon==="light"?"lighttheme":"darktheme"}`}>
-      <Home themeIcon={themeIcon} toggleTheme={() => setThemeIcon((prevTheme) => (prevTheme === "light" ? "dark" : "light"))} />
+      <Home themeIcon={themeIcon} post={post} toggleTheme={() => setThemeIcon((prevTheme) => (prevTheme === "light" ? "dark" : "light"))} />
        
     </div>
   )
