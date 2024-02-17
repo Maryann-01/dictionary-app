@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import PartsOfSpeech from "../partsOfSpeech/partsOfSpeech";
 import "../Home/Home.css"
 interface Definition {
-  themeIcon: string; // Add themeIcon property
+  themeIcon: string; 
   toggleTheme: () => void;
   post: {
     word?: string | undefined;
@@ -22,7 +22,7 @@ const Home: React.FC<Definition> = ({ themeIcon, toggleTheme }) => {
   const [value, setValue] = useState("")
   const [post, setPost] =useState<any[]>([])
   const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null); // Ref for the <audio> element
+  const audioRef = useRef<HTMLAudioElement>(null); 
 
   const handleToggleTheme = () => {
     toggleTheme();
@@ -59,7 +59,7 @@ const Home: React.FC<Definition> = ({ themeIcon, toggleTheme }) => {
       if (isPlaying) {
 
       } else {
-        const audioUrl = post[0].phonetics.find((dict:Dictionary) => dict.audio)?.audio;// Find the first dictionary with "audio" and display its audio
+        const audioUrl = post[0].phonetics.find((dict:Dictionary) => dict.audio)?.audio;
         if (audioUrl) {
           audioRef.current.src = audioUrl;
           audioRef.current.play().catch((error) =>
@@ -98,7 +98,7 @@ const Home: React.FC<Definition> = ({ themeIcon, toggleTheme }) => {
         <section className="part-three">
           <div className="word">
             {post.length > 0 && (
-              <h1 key={post[0].word}>{post[0].word}</h1> // Display only first word
+              <h1 key={post[0].word}>{post[0].word}</h1> 
             )}
 
             <div className="play" onClick={handlePlay}>
@@ -108,7 +108,7 @@ const Home: React.FC<Definition> = ({ themeIcon, toggleTheme }) => {
           </div>
           <p className="phonetics">
             {post.length > 0  && (
-              // Find the first dictionary with "text" and display its text
+             
               <span>
                 {post[0].phonetics?.find((dict: Dictionary) => dict.text)?.text ?? "No phonetics found"}
               </span>
