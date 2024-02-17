@@ -6,10 +6,11 @@ import "../Home/Home.css"
 interface Definition {
   themeIcon: string; 
   toggleTheme: () => void;
-  post: {
-    word?: string | undefined;
-    phonetics?: Dictionary[];
-  }[]
+  // post: {
+  //   word?: string | undefined;
+  //   phonetics?: Dictionary[];
+  // }[]
+  post?: any[];
 }
 interface Dictionary {
   text?: string;
