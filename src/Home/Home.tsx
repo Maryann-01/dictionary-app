@@ -4,12 +4,18 @@ import { useState, useEffect, useRef } from "react";
 import PartsOfSpeech from "../partsOfSpeech/partsOfSpeech";
 import "../Home/Home.css"
 interface Definition {
+  themeIcon: string; // Add themeIcon property
+  toggleTheme: () => void;
   post: {
     word: string | undefined;
     phonetics: Dictionary[];
   }[]
-
 }
+interface Dictionary {
+  text?: string;
+  audio?: string;
+}
+
 
 const Home: React.FC<Definition> = ({ themeIcon, toggleTheme }) => {
   // const [themeIcon, setThemeIcon] = useState("light")
@@ -18,12 +24,12 @@ const Home: React.FC<Definition> = ({ themeIcon, toggleTheme }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null); // Ref for the <audio> element
 
-  const handleToggleTheme=()=>{
+  const handleToggleTheme = () => {
     toggleTheme();
   }
   const fetchData = async () => {
     const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${value}`
-    const response = await fetch(url); 
+    const response = await fetch(url);
     const data = await response.json();
 
     console.log(data[0])
@@ -37,12 +43,12 @@ const Home: React.FC<Definition> = ({ themeIcon, toggleTheme }) => {
 
   }, [])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetchData();
   }
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSubmit(e)
     }
@@ -51,7 +57,7 @@ const Home: React.FC<Definition> = ({ themeIcon, toggleTheme }) => {
   const handlePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
-       
+
       } else {
         const audioUrl = post[0].phonetics.find((dict) => dict.audio)?.audio;// Find the first dictionary with "audio" and display its audio
         if (audioUrl) {
@@ -78,7 +84,7 @@ const Home: React.FC<Definition> = ({ themeIcon, toggleTheme }) => {
             <div className="toggle-theme">
               <div></div>
             </div>
-            {themeIcon === "light" ? <FaSun onClick={handleToggleTheme} /> : <FaMoon onClick={handleToggleTheme}/>}
+            {themeIcon === "light" ? <FaSun onClick={handleToggleTheme} /> : <FaMoon onClick={handleToggleTheme} />}
           </div>
         </div>
       </section>
@@ -88,27 +94,32 @@ const Home: React.FC<Definition> = ({ themeIcon, toggleTheme }) => {
           <FaSearch className="faSearch" />
         </form>
       </section>
-      <section className="part-three">
-        <div className="word">
-          {post.length > 0 && (
-            <h1 key={post[0].word}>{post[0].word}</h1> // Display only first word
-          )}
+      {post.length > 0 && (
+        <section className="part-three">
+          <div className="word">
+            {post.length > 0 && (
+              <h1 key={post[0].word}>{post[0].word}</h1> // Display only first word
+            )}
 
-          <div className="play" onClick={handlePlay}>
-            <audio ref={audioRef} onEnded={() => setIsPlaying(false)} />
-            <FaPlay className="playIcon" />
+            <div className="play" onClick={handlePlay}>
+              <audio ref={audioRef} onEnded={() => setIsPlaying(false)} />
+              <FaPlay className="playIcon" />
+            </div>
           </div>
-        </div>
-        <p className="phonetics">
-          {post.length > 0 && (
-            // Find the first dictionary with "text" and display its text
-            <span>
-              {post[0].phonetics.find((dict) => dict.text)?.text ?? "No phonetics found"}
-            </span>
-          )}
-        </p>
-      </section>
-      <PartsOfSpeech post={post} />
+          <p className="phonetics">
+            {post.length > 0 && (
+              // Find the first dictionary with "text" and display its text
+              <span>
+                {post[0].phonetics.find((dict) => dict.text)?.text ?? "No phonetics found"}
+              </span>
+            )}
+          </p>
+        </section>
+      )}
+      {post.length > 0 && (
+        <PartsOfSpeech post={post} />
+      )}
+
     </div>
   )
 }
